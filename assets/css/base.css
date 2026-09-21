@@ -1,0 +1,121 @@
+/* base.css
+   resets, fonts, colours. this + shared.css are the only 2 stylesheets
+   we're allowed (assignment rule), so everything goes in these two files */
+
+* {
+    box-sizing: border-box;
+}
+
+/* DARK is the default look. Light is switched on by putting
+   data-theme="light" on the <html> tag (the profile page will do this later).
+   The OS setting is ignored on purpose so the app looks the same everywhere. */
+:root {
+    color-scheme: dark;      /* native bits like the number spinner go dark too */
+
+    --blue: #4aa9f0;
+    --blue-deep: #2c86c9;
+    --ink: #7ccaff;          /* blue for text and icons */
+    --gold: #d9ae4e;
+    --gold-deep: #b98f33;
+    --gold-ink: #ffd777;     /* gold for text */
+    --text: #ffffff;
+    --text-soft: #ebebf599;
+    --text-faint: #ebebf54d;
+    --bg-rgb: 0 0 0;         /* the tab bar fade needs the background as r g b */
+    --bg: rgb(var(--bg-rgb));
+    --card: #1c1c1e;
+    --line: #54545861;
+    --red: #ff6b6b;
+    --green: #4cd964;
+
+    /* press feel on glass buttons, locked values from DESIGN.md */
+    --bloom: 1.03;
+    --bounce: 1.60;
+    --speed: 260ms;
+}
+
+:root[data-theme="light"] {
+    color-scheme: light;
+
+    --blue: #3aa8ff;
+    --blue-deep: #1f93ef;
+    --ink: #0d7fd6;
+    --gold: #e8bd4a;
+    --gold-deep: #d4a521;
+    --gold-ink: #a97f12;
+    --text: #000000;
+    --text-soft: #3c3c4399;
+    --text-faint: #3c3c4359;
+    --bg-rgb: 242 242 247;
+    --card: #ffffff;
+    --line: #3c3c432b;
+    --red: #d92c2c;
+    --green: #2a9d4a;
+}
+
+/* The bottom bar's own colours. Its stylesheet reads the OS setting, but we
+   want the app's own switch to decide, so these are set here with a stronger
+   selector than the bar's and follow data-theme instead. Values are the bar's
+   own dark and light sets, not new ones. */
+:root:not([data-theme="light"]) {
+    --tabbar-frost: 38 38 41;
+    --tabbar-frost-a: 0.74;
+    --tabbar-rim-hot: #ffffff8f;
+    --tabbar-rim-cool: #ffffff1f;
+    --tabbar-shade: #00000047;
+    --tabbar-ink: #7ccaff;
+    --tabbar-text-2: #ebebf599;
+    --tabbar-lens-rest: #ffffff1c;
+    --tabbar-lens-live: #ffffff17;
+    --tabbar-lens-rim: #ffffffc9;
+}
+
+:root[data-theme="light"] {
+    --tabbar-frost: 250 250 252;
+    --tabbar-frost-a: 0.78;
+    --tabbar-rim-hot: #ffffffed;
+    --tabbar-rim-cool: #ffffff45;
+    --tabbar-shade: #00000016;
+    --tabbar-ink: #0d7fd6;
+    --tabbar-text-2: #3c3c4399;
+    --tabbar-lens-rest: #78788026;
+    --tabbar-lens-live: #ffffff1c;
+    --tabbar-lens-rim: #ffffff;
+}
+
+/* pages with the bottom tab bar need room so the last thing isn't hidden under it */
+body.has-tabbar {
+    padding-bottom: calc(150px + env(safe-area-inset-bottom));
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.4;
+}
+
+.page {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 24px 18px 60px;
+}
+
+.title {
+    font-size: 30px;
+    font-weight: 700;
+    margin: 10px 0 4px;
+}
+
+.sub {
+    color: var(--text-soft);
+    font-size: 15px;
+    margin: 0 0 22px;
+}
+
+a {
+    color: var(--blue-deep);
+    text-decoration: none;
+}

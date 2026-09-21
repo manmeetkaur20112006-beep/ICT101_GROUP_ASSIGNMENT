@@ -1,0 +1,1254 @@
+/* shared.css
+   cards, buttons, form fields. used across every page. */
+
+.group {
+    background: var(--card);
+    border-radius: 18px;
+    overflow: hidden;
+    margin-bottom: 16px;
+}
+
+.row {
+    padding: 12px 16px;
+    position: relative;
+}
+
+/* the divider is drawn as its own strip so it can stop short of the edges.
+   same 16px gap both sides, never edge to edge (DESIGN.md section 5) */
+.row + .row::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 16px;
+    right: 16px;
+    height: 1px;
+    background: var(--line);
+}
+
+/* a row that opens something when tapped */
+.row.link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text);
+    transition: background 110ms ease;
+}
+
+.row.link .label {
+    flex: 1;
+}
+
+.row.link.pressed {
+    background: var(--line);
+}
+
+.chev {
+    color: var(--text-faint);
+    flex: none;
+    display: grid;
+}
+
+.chev svg {
+    width: 13px;
+    height: 13px;
+}
+
+input, select, textarea {
+    width: 100%;
+    border: none;
+    font-size: 16px;
+    font-family: inherit;
+    background: none;
+    color: var(--text);       /* typed text is full strength */
+    padding: 4px 0;
+}
+
+input::placeholder, textarea::placeholder {
+    color: var(--text-faint); /* hints are clearly fainter than typed text */
+}
+
+select option {
+    background: var(--card);
+    color: var(--text);
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+}
+
+.btn {
+    display: block;
+    width: 100%;
+    border: none;
+    border-radius: 999px;
+    padding: 15px;
+    margin-top: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(176deg, var(--blue), var(--blue-deep));
+    cursor: pointer;
+}
+
+a.btn {
+    text-align: center;
+    text-decoration: none;
+}
+
+.btn.gold {
+    background: linear-gradient(176deg, var(--gold), var(--gold-deep));
+}
+
+.btn.plain {
+    background: var(--card);
+    color: var(--blue-deep);
+    box-shadow: 0 1px 3px #0000001a;
+}
+
+/* glass button: blurred background, soft white layer, thin light edge.
+   the edge is inset shadows so it follows the round corners exactly */
+.btn.frost {
+    color: var(--ink);
+    background:
+        linear-gradient(180deg, #ffffff54 0%, #ffffff00 46%),
+        linear-gradient(0deg, var(--tabbar-shade) 0%, #00000000 36%),
+        rgb(var(--tabbar-frost) / var(--tabbar-frost-a));
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    box-shadow:
+        inset 0 1.2px 0 var(--tabbar-rim-hot),
+        inset 0 -1.2px 0 var(--tabbar-rim-cool),
+        inset 1.2px 0 0 var(--tabbar-rim-cool),
+        inset -1.2px 0 0 var(--tabbar-rim-cool),
+        0 1px 3px #0000001f;
+    transition: transform var(--speed) cubic-bezier(0.22, var(--bounce), 0.36, 1), filter 150ms ease;
+}
+
+.btn.pressed {
+    transform: scale(var(--bloom));
+    filter: brightness(1.07);
+}
+
+.error-text {
+    color: var(--red);
+    font-size: 14px;
+    margin: -6px 0 14px;
+}
+
+.link-line {
+    text-align: center;
+    font-size: 14px;
+    color: var(--text-soft);
+    margin-top: 14px;
+}
+
+/* field-level JS validation messages, shown under an input */
+.field-error {
+    display: block;
+    color: var(--red);
+    font-size: 13px;
+    margin: 4px 0 0;
+}
+
+/* small grey helper text under a field */
+.hint {
+    display: block;
+    color: var(--text-soft);
+    font-size: 13px;
+    margin: 4px 0 0;
+}
+
+/* label above a read-only value */
+.info-label {
+    margin: 0 0 4px;
+    color: var(--text-soft);
+    font-size: 13px;
+}
+
+.info-value {
+    margin: 0;
+    font-weight: 600;
+}
+
+/* multi-step form (register.php, forgot-password.php) */
+.step {
+    display: none;
+}
+
+.step.active {
+    display: block;
+}
+
+.step-count {
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-soft);
+    margin: -10px 0 18px;
+}
+
+/* plan choice cards, step 2 of registration */
+.plan-option {
+    padding: 14px 16px;
+    border: 2px solid transparent;
+    border-radius: 14px;
+    background: var(--card);
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: border-color 0.15s ease;
+}
+
+.plan-option:has(input:checked) {
+    border-color: var(--blue-deep);
+}
+
+.plan-option label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.plan-option input[type="radio"] {
+    width: auto;
+    accent-color: var(--blue-deep);
+}
+
+.qr-box {
+    text-align: center;
+    background: var(--card);
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 3px #0000001a;
+}
+
+.qr-box img {
+    border-radius: 10px;
+    box-shadow: 0 1px 6px #00000022;
+}
+
+.upi-id {
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    margin: 10px 0 0;
+}
+
+.checkbox-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.checkbox-row input[type="checkbox"] {
+    width: auto;
+    margin-top: 3px;
+    accent-color: var(--blue-deep);
+}
+
+.btn-outline {
+    display: block;
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 15px;
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    background: none;
+    cursor: pointer;
+}
+
+/* header on logged-in pages: gym logo and who is signed in. no navigation here,
+   that lives in the bottom bar only */
+.topbar {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 14px 18px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.topbar .who {
+    font-size: 13px;
+    color: var(--text-soft);
+    text-align: right;
+}
+
+/* small switcher inside a page, e.g. Workout / Diet (DESIGN.md section 2) */
+.seg {
+    display: flex;
+    gap: 2px;
+    padding: 2px;
+    background: var(--line);
+    border-radius: 999px;
+    margin-bottom: 18px;
+}
+
+.seg button {
+    flex: 1;
+    border: 0;
+    font: inherit;
+    font-size: 13.5px;
+    font-weight: 500;
+    padding: 7px 0;
+    border-radius: 999px;
+    background: none;
+    color: var(--text);
+    cursor: pointer;
+}
+
+.seg button.on {
+    background: var(--card);
+    box-shadow: 0 1px 3px #00000024;
+}
+
+.panel {
+    display: none;
+}
+
+.panel.on {
+    display: block;
+}
+
+/* tiny pill next to a heading, e.g. "Today" */
+.badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--blue-deep);
+    color: #fff;
+    vertical-align: middle;
+    margin-left: 6px;
+}
+
+.section-title .muted {
+    color: var(--text-soft);
+    font-weight: 400;
+    font-size: 14px;
+}
+
+/* a row that is really a button, e.g. tick a meal off */
+button.row.link {
+    width: 100%;
+    text-align: left;
+    font: inherit;
+    border: 0;
+    background: none;
+    cursor: pointer;
+}
+
+/* a row where the name opens something and the circle on the right ticks it */
+.row.split {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.row.split .label {
+    flex: 1;
+    color: var(--text);
+}
+
+.row.split form {
+    flex: none;
+    display: grid;
+}
+
+/* tick circle on the right of a row */
+.check {
+    flex: none;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border-radius: 50%;
+    border: 1.5px solid var(--text-faint);
+    background: none;
+    display: grid;
+    place-items: center;
+    color: transparent;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.check.on {
+    background: var(--green);
+    border-color: var(--green);
+    color: #fff;
+}
+
+/* embedded tutorial video, keeps a 16:9 shape */
+.video {
+    position: relative;
+    padding-top: 56.25%;
+    border-radius: 18px;
+    overflow: hidden;
+    background: var(--card);
+    margin-bottom: 16px;
+}
+
+.video iframe, .video img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.credit {
+    font-size: 12px;
+    color: var(--text-faint);
+    text-align: right;
+    margin: -10px 0 16px;
+}
+
+.group ol, .group ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.group li + li {
+    margin-top: 6px;
+}
+
+.back-link {
+    display: inline-block;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+/* profile page */
+.pass {
+    background: var(--card);
+    border-radius: 18px;
+    padding: 20px 16px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.pass .qr {
+    flex: none;
+    width: 110px;
+    height: 110px;
+    background: #fff;        /* a QR needs a white background to scan */
+    border-radius: 12px;
+    padding: 6px;
+}
+
+.pass .qr img {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.pass .code {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    font-variant-numeric: tabular-nums;
+}
+
+.pass .name {
+    font-size: 15px;
+    margin: 2px 0 6px;
+}
+
+.pass .status {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 999px;
+    background: var(--green);
+    color: #fff;
+}
+
+.pass .status.warn {
+    background: var(--gold-deep);
+}
+
+.pass .status.bad {
+    background: var(--red);
+}
+
+/* label on the left, value on the right */
+.row.kv {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+}
+
+.row.kv .val {
+    color: var(--text-soft);
+    text-align: right;
+}
+
+.row.kv .val.gold {
+    color: var(--gold-ink);
+    font-weight: 700;
+}
+
+.row .field-label {
+    display: block;
+    font-size: 12px;
+    color: var(--text-soft);
+    margin-bottom: 2px;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 60px;
+}
+
+/* two small action buttons side by side on a row, e.g. Approve / Reject */
+.actions {
+    flex: none;
+    display: flex;
+    gap: 6px;
+}
+
+.actions .btn.small, .actions .btn-outline.small {
+    padding: 8px 12px;
+    font-size: 13px;
+    margin: 0;
+    width: auto;
+}
+
+.stat-grid.three {
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.stat .num.small {
+    font-size: 22px;
+}
+
+/* filter buttons like Apple Mail: short grey capsules with a filled icon,
+   the chosen one turns white, opens up and shows its name in bold.
+   everything fits on one line, nothing scrolls */
+.filters {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.filters a {
+    --icon-bg: var(--card);      /* the "cut out" parts of the icons use this */
+    flex: 0 1 54px;
+    min-width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    background: var(--card);
+    color: var(--text-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    padding: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    /* the chosen one grows and the old one shrinks. only flex-grow changes
+       (the base width stays 54px on both) because a browser can't animate
+       to "auto", it just jumps */
+    transition:
+        flex-basis 300ms cubic-bezier(0.22, 1, 0.36, 1),
+        flex-grow 300ms cubic-bezier(0.22, 1, 0.36, 1),
+        padding 300ms cubic-bezier(0.22, 1, 0.36, 1),
+        gap 300ms cubic-bezier(0.22, 1, 0.36, 1),
+        background 180ms ease,
+        color 180ms ease;
+}
+
+.filters a svg {
+    width: 22px;
+    height: 22px;
+    flex: none;
+    transition: color 180ms ease;
+}
+
+/* the name is always there but folded away, so it can fade in as the capsule opens */
+.filters a .t {
+    max-width: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-width var(--speed) ease, opacity 200ms ease;
+}
+
+.filters a.on {
+    --icon-bg: var(--text);
+    flex: 1 1 150px;             /* the base width itself animates from 54px up to this */
+    min-width: 0;
+    padding: 0 18px;
+    gap: 8px;
+    background: var(--text);
+    color: var(--bg);
+}
+
+.filters a.on .t {
+    max-width: 160px;
+    opacity: 1;
+    transition-delay: 80ms;
+}
+
+/* floating glass search bar, sits just above the bottom tab bar.
+   same frost recipe as the bar so the two look like a set */
+.search-dock {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: calc(88px + env(safe-area-inset-bottom));
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 55;
+}
+
+.search-bar {
+    pointer-events: auto;
+    width: min(var(--bar-w), calc(100% - 32px));
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 8px 0 16px;
+    height: 48px;
+    border-radius: 999px;
+    background: rgb(var(--tabbar-frost) / var(--tabbar-frost-a));
+    backdrop-filter: blur(30px) saturate(190%);
+    -webkit-backdrop-filter: blur(30px) saturate(190%);
+    box-shadow:
+        inset 0 1.2px 0 var(--tabbar-rim-hot),
+        inset 0 -1.2px 0 var(--tabbar-rim-cool),
+        inset 1.2px 0 0 var(--tabbar-rim-cool),
+        inset -1.2px 0 0 var(--tabbar-rim-cool),
+        0 7px 18px #00000026,
+        0 1px 2px #0000001c;
+}
+
+.search-bar svg {
+    width: 20px;
+    height: 20px;
+    flex: none;
+    color: var(--tabbar-text-2);
+}
+
+.search-bar input {
+    flex: 1;
+    min-width: 0;
+    padding: 0;
+    font-size: 16px;
+}
+
+.search-bar input::placeholder {
+    color: var(--tabbar-text-2);
+}
+
+/* the glass Search button on the right end of the bar, tinted blue */
+.search-bar .btn.frost.small {
+    height: 36px;
+    padding: 0 16px;
+    font-size: 14px;
+    color: #fff;
+    background:
+        linear-gradient(180deg, #ffffff4d 0%, #ffffff00 46%),
+        linear-gradient(0deg, #00000026 0%, #00000000 36%),
+        var(--blue-deep);
+    box-shadow:
+        inset 0 1.2px 0 #ffffffb8,
+        inset 0 -1.2px 0 #ffffff33,
+        inset 1.2px 0 0 #ffffff59,
+        inset -1.2px 0 0 #ffffff59,
+        0 1px 3px #0000002b;
+}
+
+/* the page needs extra room at the bottom when the search bar is there too */
+body.has-searchbar {
+    padding-bottom: calc(215px + env(safe-area-inset-bottom));
+}
+
+.two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.two-col .btn, .two-col .btn-outline {
+    margin-top: 0;
+}
+
+/* a delete button after its first tap, waiting for the second */
+.confirm-btn.armed {
+    background: var(--red) !important;
+    border-color: var(--red) !important;
+    color: #fff !important;
+}
+
+/* small status pill: Pending / Confirmed / Rejected etc */
+.pill {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 999px;
+    background: var(--line);
+    color: var(--text);
+    white-space: nowrap;
+}
+
+.pill.pending  { background: var(--gold-deep); color: #fff; }
+.pill.good     { background: var(--green); color: #fff; }
+.pill.bad      { background: var(--red); color: #fff; }
+
+/* scanner page */
+.cam {
+    position: relative;
+    background: #000;
+    border-radius: 18px;
+    overflow: hidden;
+    aspect-ratio: 1;
+    margin-bottom: 12px;
+}
+
+.cam video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.cam .frame {
+    position: absolute;
+    inset: 18%;
+    border: 2px solid #ffffffb3;
+    border-radius: 16px;
+    pointer-events: none;
+}
+
+.cam .msg {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 10px;
+    text-align: center;
+    font-size: 13px;
+    color: #fff;
+    background: #00000099;
+}
+
+.result-box {
+    text-align: center;
+    padding: 22px 16px;
+    border-radius: 18px;
+    background: var(--card);
+    margin-bottom: 16px;
+}
+
+.result-box .big {
+    font-size: 40px;
+    line-height: 1;
+    margin-bottom: 8px;
+}
+
+.result-box h2 {
+    margin: 0 0 4px;
+    font-size: 20px;
+}
+
+.result-box p {
+    margin: 0;
+    color: var(--text-soft);
+    font-size: 14px;
+}
+
+/* star rating on the feedback form */
+.stars {
+    display: flex;
+    gap: 6px;
+}
+
+.stars input {
+    display: none;
+}
+
+.stars label {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--line);
+    color: var(--text-soft);
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.stars input:checked + label {
+    background: var(--gold);
+    color: #000;
+}
+
+/* search results */
+.result-kind {
+    font-size: 12px;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+mark {
+    background: #e8bd4a66;
+    color: inherit;
+    border-radius: 3px;
+    padding: 0 2px;
+}
+
+/* printing the check-in poster: only the QR box comes out, big, on white */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    .print-area, .print-area * {
+        visibility: visible;
+    }
+    .print-area {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: #fff !important;
+        color: #000 !important;
+        box-shadow: none;
+        clip-path: none !important;
+    }
+    .print-area img {
+        width: 70vw;
+        height: auto;
+        max-width: 500px;
+    }
+    .print-area .upi-id {
+        font-size: 28px;
+        color: #000 !important;
+    }
+    .print-area .hint {
+        color: #444 !important;
+    }
+}
+
+/* progress page: weight chart, calendar, leaderboard */
+.chart-box {
+    background: var(--card);
+    border-radius: 18px;
+    padding: 14px 12px 8px;
+    margin-bottom: 16px;
+}
+
+.chart-box svg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.chart-box .line {
+    fill: none;
+    stroke: var(--blue);
+    stroke-width: 2.5;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+}
+
+.chart-box .fill {
+    fill: var(--blue);
+    opacity: 0.12;
+}
+
+.chart-box .dot {
+    fill: var(--card);
+    stroke: var(--blue);
+    stroke-width: 2;
+}
+
+.chart-box .target {
+    stroke: var(--gold);
+    stroke-width: 1.5;
+    stroke-dasharray: 4 4;
+}
+
+.chart-box .axis {
+    fill: var(--text-soft);
+    font-size: 10px;
+}
+
+.chart-box .grid {
+    stroke: var(--line);
+    stroke-width: 1;
+}
+
+.cal {
+    background: var(--card);
+    border-radius: 18px;
+    padding: 14px 12px 12px;
+    margin-bottom: 16px;
+}
+
+.cal .head, .cal .days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    text-align: center;
+}
+
+.cal .head span {
+    font-size: 11px;
+    color: var(--text-soft);
+    padding-bottom: 4px;
+}
+
+.cal .d {
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+}
+
+.cal .d.rest {
+    color: var(--text-faint);
+}
+
+.cal .d.went {
+    background: var(--green);
+    color: #fff;
+    font-weight: 600;
+}
+
+.cal .d.today {
+    box-shadow: inset 0 0 0 1.5px var(--blue);
+}
+
+.cal .d.future {
+    color: var(--text-faint);
+}
+
+.legend {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    font-size: 12px;
+    color: var(--text-soft);
+    margin-top: 10px;
+}
+
+.legend i {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 4px;
+    vertical-align: -1px;
+}
+
+.rank {
+    flex: none;
+    width: 28px;
+    font-weight: 700;
+    color: var(--text-soft);
+    font-variant-numeric: tabular-nums;
+}
+
+.rank.top {
+    color: var(--gold-ink);
+}
+
+.row.me {
+    background: #4aa9f014;
+}
+
+.pts {
+    flex: none;
+    font-weight: 700;
+    color: var(--gold-ink);
+    font-variant-numeric: tabular-nums;
+}
+
+/* dashboard pieces */
+.section-title {
+    font-size: 18px;
+    margin: 20px 0 10px;
+}
+
+.stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 4px;
+}
+
+.stat {
+    background: var(--card);
+    border-radius: 18px;
+    padding: 16px 12px;
+    text-align: center;
+}
+
+.stat .num {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+}
+
+.stat .lbl {
+    font-size: 13px;
+    color: var(--text-soft);
+    margin-top: 4px;
+}
+
+/* gold is for streak and points only */
+.stat.gold .num {
+    color: var(--gold-ink);
+}
+
+.stat.good .num {
+    color: var(--green);
+}
+
+.stat.muted .num {
+    color: var(--text-soft);
+}
+
+.notice {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    border-left: 4px solid var(--line);
+}
+
+.notice.important {
+    border-left-color: var(--gold);
+}
+
+.notice h3 {
+    margin: 0 0 4px;
+    font-size: 15px;
+}
+
+.notice p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.notice .meta {
+    color: var(--text-soft);
+    font-size: 12px;
+    margin-top: 6px;
+}
+
+.tick {
+    color: var(--green);
+    font-weight: 700;
+    margin-right: 6px;
+}
+
+.done {
+    color: var(--text-soft);
+    text-decoration: line-through;
+}
+
+.row-label {
+    font-size: 13px;
+    color: var(--text-soft);
+    margin-bottom: 4px;
+}
+
+.inline-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.inline-form input {
+    flex: 1;
+}
+
+.btn.small {
+    width: auto;
+    margin: 0;
+    padding: 9px 16px;
+    font-size: 14px;
+}
+
+.success-text {
+    color: var(--green);
+    font-size: 14px;
+    margin: 0 0 14px;
+}
+
+.empty-text {
+    color: var(--text-soft);
+    font-size: 14px;
+    text-align: center;
+    padding: 18px;
+    background: var(--card);
+    border-radius: 14px;
+}
+
+/* logo + footer, used across every page */
+.site-logo {
+    display: block;
+    margin: 0 auto 6px;
+}
+
+.site-footer {
+    max-width: 480px;
+    margin: 30px auto 0;
+    padding: 18px 18px 0;
+    text-align: center;
+    border-top: 1px solid var(--line);
+    color: var(--text-soft);
+    font-size: 13px;
+}
+
+.site-footer a {
+    color: var(--text-soft);
+}
+
+
+/* =====================================================================
+   BOTTOM TAB BAR. Pasted unchanged from liquid-tabbar.css because the
+   project is limited to two stylesheets. Do not retune, see DESIGN.md.
+   ===================================================================== */
+
+/* Liquid glass tab bar
+   Singh Fitness Gym, final values. Reusable in other projects.
+
+   Locked settings:
+     button bloom 1.030   button bounce 1.60   button speed 260ms
+     lens springiness 160 lens wobble 21.5
+     lens swell wide 1.31 lens swell tall 1.46
+     bar give 5px         icon zoom 1.30
+     bar width 360px      bar thickness 5px
+*/
+
+:root {
+  --tabbar-frost: 250 250 252;
+  --tabbar-frost-a: 0.78;
+  --tabbar-rim-hot: #ffffffed;
+  --tabbar-rim-cool: #ffffff45;
+  --tabbar-shade: #00000016;
+  --tabbar-ink: #0d7fd6;
+  --tabbar-text-2: #3c3c4399;
+  --tabbar-lens-rest: #78788026;
+  --tabbar-lens-live: #ffffff1c;
+  --tabbar-lens-rim: #ffffff;
+  --bar-w: 360px;
+  --tab-pad: 5px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --tabbar-frost: 38 38 41;
+    --tabbar-frost-a: 0.74;
+    --tabbar-rim-hot: #ffffff8f;
+    --tabbar-rim-cool: #ffffff1f;
+    --tabbar-shade: #00000047;
+    --tabbar-ink: #7ccaff;
+    --tabbar-text-2: #ebebf599;
+    --tabbar-lens-rest: #ffffff1c;
+    --tabbar-lens-live: #ffffff17;
+    --tabbar-lens-rim: #ffffffc9;
+  }
+}
+
+.scrim {
+  position: fixed; left: 0; right: 0; bottom: 0;
+  height: calc(190px + env(safe-area-inset-bottom));
+  pointer-events: none; z-index: 40;
+  background: linear-gradient(180deg,
+    rgb(var(--bg-rgb)/0) 0%, rgb(var(--bg-rgb)/0.12) 34%,
+    rgb(var(--bg-rgb)/0.30) 56%, rgb(var(--bg-rgb)/0.52) 76%, rgb(var(--bg-rgb)/0.72) 100%);
+}
+
+.dock {
+  position: fixed; left: 0; right: 0; bottom: calc(16px + env(safe-area-inset-bottom));
+  display: flex; justify-content: center; pointer-events: none; z-index: 60;
+}
+
+.bar {
+  position: relative; pointer-events: auto;
+  width: min(var(--bar-w), calc(100% - 32px));
+  padding: 6px; touch-action: none; border-radius: 999px; overflow: visible;
+  transition: transform 340ms cubic-bezier(0.22, 1.5, 0.36, 1);
+}
+
+.bar.held { transform: scale(1.022); }
+
+.bar__glass {
+  position: absolute; inset: 0; border-radius: inherit; z-index: 0;
+  background: rgb(var(--tabbar-frost) / var(--tabbar-frost-a));
+  backdrop-filter: blur(30px) saturate(190%);
+  -webkit-backdrop-filter: blur(30px) saturate(190%);
+  /* on the clipped layer, so it follows the dent instead of drawing the
+     original capsule outline behind it */
+  filter: drop-shadow(0 7px 18px #00000026) drop-shadow(0 1px 2px #0000001c);
+}
+
+/* the edge is stroked, not an inset shadow, so it bends with the dent */
+.bar__edge { position: absolute; inset: 0; z-index: 2; pointer-events: none; overflow: visible; }
+
+.bar__edge path { fill: none; stroke-width: 1.3; }
+
+.bar__sheen {
+  position: absolute; inset: 0; border-radius: inherit; z-index: 1; pointer-events: none;
+  background: linear-gradient(180deg, #ffffff54 0%, #ffffff00 46%),
+              linear-gradient(0deg, var(--tabbar-shade) 0%, #00000000 36%);
+}
+
+.tabs { display: flex; position: relative; z-index: 2; }
+
+.lens {
+  position: absolute; top: 0; left: 0; width: 25%; height: 100%;
+  border-radius: 999px; z-index: 0; will-change: transform, width, height;
+  transform-origin: center center;
+  background: var(--tabbar-lens-rest); box-shadow: inset 0 1px 0 #ffffff5c;
+  transition: background 200ms ease, box-shadow 200ms ease;
+}
+
+/* live: clear glass that swells past the bar edge and glows at its boundary,
+   which is what makes the bar look pinched underneath it */
+.lens.lit {
+  background: var(--tabbar-lens-live);
+  backdrop-filter: saturate(124%) brightness(1.03);
+  -webkit-backdrop-filter: saturate(124%) brightness(1.03);
+  box-shadow:
+    inset 0 1.8px 0 var(--tabbar-lens-rim),
+    inset 0 -1.6px 0 #ffffff99,
+    inset 1.6px 0 0 #ffffffb3,
+    inset -1.6px 0 0 #ffffffb3,
+    0 2px 8px #0000001f;
+}
+
+.tab {
+  flex: 1; border: 0; background: none; font: inherit; color: var(--tabbar-text-2);
+  padding: var(--tab-pad) 0 calc(var(--tab-pad) - 1px);
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  position: relative; z-index: 1; cursor: pointer; transition: color 220ms ease;
+  transform-origin: center;
+}
+
+.tab svg { width: 23px; height: 23px; }
+
+.tab .t { font-size: 10px; font-weight: 500; }
+
+.tab.on { color: var(--tabbar-ink); }

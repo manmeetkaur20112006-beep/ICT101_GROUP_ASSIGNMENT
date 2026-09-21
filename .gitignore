@@ -1,0 +1,6 @@
+*.pdf
+*.zip
+
+# owner uploads (payment QR etc) are data, not code. keep the folder, not the files
+uploads/*
+!uploads/.gitkeep

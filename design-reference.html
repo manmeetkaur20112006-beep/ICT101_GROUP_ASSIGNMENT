@@ -1,0 +1,625 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Singh Fitness — feel test 15</title>
+<style>
+:root {
+  --bg-rgb: 242 242 247;
+  --bg: rgb(var(--bg-rgb));
+  --card: #fff;
+  --text: #000;
+  --text-2: #3c3c4399;
+  --text-3: #3c3c4359;
+  --sep: #3c3c432b;
+  --track: #78788033;
+
+  --blue: #3aa8ff;
+  --blue-deep: #1f93ef;
+  --gold: #e8bd4a;
+  --gold-deep: #d4a521;
+  --ink: #0d7fd6;
+  --gold-ink: #a97f12;
+
+  --frost: 250 250 252;
+  --frost-a: 0.78;
+  --rim-hot: #ffffffed;
+  --rim-cool: #ffffff45;
+  --shade: #00000016;
+
+  --lens-rest: #78788026;
+  --lens-live: #ffffff1c;
+  --lens-rim: #ffffff;
+  --lens-halo: #ffffff00;
+
+  --bloom: 1.03;
+  --bounce: 1.60;
+  --speed: 260ms;
+  --bar-w: 360px;
+  --tab-pad: 5px;
+}
+
+:root[data-theme=dark] {
+  --bg-rgb: 0 0 0; --card: #1c1c1e; --text: #fff;
+  --text-2: #ebebf599; --text-3: #ebebf54d; --sep: #54545861; --track: #78788052;
+  --blue: #4aa9f0; --blue-deep: #2c86c9; --gold: #d9ae4e; --gold-deep: #b98f33;
+  --ink: #7ccaff; --gold-ink: #ffd777;
+  --frost: 38 38 41; --frost-a: 0.74;
+  --rim-hot: #ffffff8f; --rim-cool: #ffffff1f; --shade: #00000047;
+  --lens-rest: #ffffff1c; --lens-live: #ffffff17; --lens-rim: #ffffffc9; --lens-halo: #ffffff00;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme=light]):not([data-theme=dark]) {
+    --bg-rgb: 0 0 0; --card: #1c1c1e; --text: #fff;
+    --text-2: #ebebf599; --text-3: #ebebf54d; --sep: #54545861; --track: #78788052;
+    --blue: #4aa9f0; --blue-deep: #2c86c9; --gold: #d9ae4e; --gold-deep: #b98f33;
+    --ink: #7ccaff; --gold-ink: #ffd777;
+    --frost: 38 38 41; --frost-a: 0.74;
+    --rim-hot: #ffffff8f; --rim-cool: #ffffff1f; --shade: #00000047;
+    --lens-rest: #ffffff1c; --lens-live: #ffffff17; --lens-rim: #ffffffc9; --lens-halo: #ffffff00;
+  }
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+  font-size: 17px; line-height: 1.35; letter-spacing: -0.016em;
+  -webkit-font-smoothing: antialiased;
+  padding-bottom: calc(150px + env(safe-area-inset-bottom));
+  overflow-x: hidden;
+}
+.page { max-width: 560px; margin: 0 auto; padding: 6px 18px 40px; }
+
+.title {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+  font-size: 34px; font-weight: 700; letter-spacing: -0.032em; line-height: 1.08; margin: 20px 0 5px;
+}
+.sub { color: var(--text-2); font-size: 15px; margin: 0 0 24px; }
+.lbl { font-size: 13px; color: var(--text-2); font-weight: 500; margin: 30px 0 8px 18px; }
+
+.seg { display: flex; gap: 2px; padding: 2px; background: var(--sep); border-radius: 999px; }
+.seg button {
+  flex: 1; border: 0; font: inherit; font-size: 13.5px; font-weight: 500;
+  padding: 7px 0; border-radius: 999px; background: none; color: var(--text); cursor: pointer;
+}
+.seg button.on { background: var(--card); box-shadow: 0 1px 3px #00000024; }
+
+.band {
+  height: 165px; border-radius: 26px; margin: 6px 0;
+  background:
+    radial-gradient(120% 140% at 12% 18%, #ff9b4d 0%, #ff9b4d00 55%),
+    radial-gradient(120% 140% at 88% 24%, #7c5cff 0%, #7c5cff00 58%),
+    linear-gradient(122deg, #1184e8, #17c1c1 45%, #e8bd4a 100%);
+  display: grid; place-items: center; color: #fff; font-weight: 600; font-size: 14px;
+  text-shadow: 0 1px 3px #0003;
+}
+
+.group { background: var(--card); border-radius: 22px; overflow: hidden; }
+.row { display: flex; align-items: center; gap: 12px; padding: 13px 16px; position: relative; min-height: 48px; }
+.row + .row::before {
+  content: ""; position: absolute; top: 0; left: 54px; right: 16px;
+  height: 1px; background: var(--sep); transform: scaleY(0.5);
+}
+.group.plain .row + .row::before { left: 16px; }
+.row[data-tap] { transition: background 110ms ease; }
+.row[data-tap].pressed { background: var(--sep); }
+
+.ic { width: 28px; flex: none; display: grid; place-items: center; color: var(--ink); }
+.ic svg { width: 22px; height: 22px; }
+.ic.gold { color: var(--gold-ink); }
+.label { flex: 1; }
+.val { color: var(--text-2); }
+.chev { color: var(--text-3); flex: none; display: grid; }
+.chev svg { width: 13px; height: 13px; }
+
+.stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 11px; }
+.stat { background: var(--card); border-radius: 22px; padding: 16px 10px; text-align: center; }
+.stat .n {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+  font-size: 27px; font-weight: 700; letter-spacing: -0.03em; font-variant-numeric: tabular-nums;
+}
+.stat.g .n { color: var(--gold-ink); }
+.stat .k { font-size: 11.5px; color: var(--text-2); margin-top: 3px; }
+
+/* ---------- buttons ----------
+   The edge is drawn with inset shadows. An inset shadow follows the border
+   radius exactly, so it can never sit off the boundary the way the old
+   overlay element did. */
+.btn {
+  position: relative; display: block; width: 100%; border: 0;
+  border-radius: 999px; padding: 16px; margin-top: 11px;
+  font: inherit; font-weight: 600; letter-spacing: -0.01em;
+  color: #fff; cursor: pointer;
+  background:
+    linear-gradient(180deg, #ffffff52 0%, #ffffff12 38%, #ffffff00 52%),
+    linear-gradient(0deg, #00000026 0%, #00000000 36%),
+    linear-gradient(176deg, var(--blue), var(--blue-deep));
+  box-shadow:
+    inset 0 1.2px 0 #ffffffb8,
+    inset 0 -1.2px 0 #ffffff33,
+    inset 1.2px 0 0 #ffffff59,
+    inset -1.2px 0 0 #ffffff59,
+    0 1px 3px #0000002b;
+  transition: transform var(--speed) cubic-bezier(0.22, var(--bounce), 0.36, 1), filter 150ms ease;
+}
+.btn.gold {
+  background:
+    linear-gradient(180deg, #ffffff52 0%, #ffffff12 38%, #ffffff00 52%),
+    linear-gradient(0deg, #00000026 0%, #00000000 36%),
+    linear-gradient(176deg, var(--gold), var(--gold-deep));
+}
+.btn.frost {
+  background:
+    linear-gradient(180deg, #ffffff54 0%, #ffffff00 46%),
+    linear-gradient(0deg, var(--shade) 0%, #00000000 36%),
+    rgb(var(--frost) / var(--frost-a));
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  color: var(--ink);
+  box-shadow:
+    inset 0 1.2px 0 var(--rim-hot),
+    inset 0 -1.2px 0 var(--rim-cool),
+    inset 1.2px 0 0 var(--rim-cool),
+    inset -1.2px 0 0 var(--rim-cool),
+    0 1px 3px #0000001f;
+}
+.btn.pressed { transform: scale(var(--bloom)); filter: brightness(1.07); }
+
+/* ---------- sliders ---------- */
+.slider { flex-direction: column; align-items: stretch; gap: 11px; }
+.slider .top { display: flex; justify-content: space-between; font-size: 16px; }
+.slider .top b { color: var(--ink); font-variant-numeric: tabular-nums; }
+
+input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 30px; background: none; margin: 0; cursor: pointer; }
+input[type=range]::-webkit-slider-runnable-track {
+  height: 4px; border-radius: 2px;
+  background: linear-gradient(90deg, var(--blue-deep) var(--fill,50%), var(--track) var(--fill,50%));
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 34px; height: 22px; border-radius: 999px;
+  margin-top: -9px;
+  background: linear-gradient(180deg, #ffffffed 0%, #ffffffb8 52%, #ffffffdb 100%);
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  box-shadow:
+    inset 0 1px 0 #fff, inset 0 -1px 0 #ffffff8c,
+    inset 1px 0 0 #ffffffa8, inset -1px 0 0 #ffffffa8,
+    0 1px 2px #00000021, 0 3px 9px #0000002b;
+}
+input[type=range]::-moz-range-track { height: 4px; border-radius: 2px; background: var(--track); }
+input[type=range]::-moz-range-progress { height: 4px; border-radius: 2px; background: var(--blue-deep); }
+input[type=range]::-moz-range-thumb {
+  width: 34px; height: 22px; border: 0; border-radius: 999px;
+  background: linear-gradient(180deg, #ffffffed, #ffffffdb);
+  box-shadow: inset 0 1px 0 #fff, 0 1px 2px #00000021, 0 3px 9px #0000002b;
+}
+
+.presets { display: flex; gap: 9px; margin-top: 11px; }
+.presets button {
+  flex: 1; border: 0; font: inherit; font-size: 15px; font-weight: 600;
+  padding: 12px; border-radius: 999px; background: var(--card); color: var(--ink);
+  cursor: pointer; box-shadow: 0 1px 2px #0000001a;
+}
+
+.scrim {
+  position: fixed; left: 0; right: 0; bottom: 0;
+  height: calc(190px + env(safe-area-inset-bottom));
+  pointer-events: none; z-index: 40;
+  background: linear-gradient(180deg,
+    rgb(var(--bg-rgb)/0) 0%, rgb(var(--bg-rgb)/0.12) 34%,
+    rgb(var(--bg-rgb)/0.30) 56%, rgb(var(--bg-rgb)/0.52) 76%, rgb(var(--bg-rgb)/0.72) 100%);
+}
+
+.dock {
+  position: fixed; left: 0; right: 0; bottom: calc(16px + env(safe-area-inset-bottom));
+  display: flex; justify-content: center; pointer-events: none; z-index: 60;
+}
+.bar {
+  position: relative; pointer-events: auto;
+  width: min(var(--bar-w), calc(100% - 32px));
+  padding: 6px; touch-action: none; border-radius: 999px; overflow: visible;
+  transition: transform 340ms cubic-bezier(0.22, 1.5, 0.36, 1);
+}
+.bar.held { transform: scale(1.022); }
+.bar__glass {
+  position: absolute; inset: 0; border-radius: inherit; z-index: 0;
+  background: rgb(var(--frost) / var(--frost-a));
+  backdrop-filter: blur(30px) saturate(190%);
+  -webkit-backdrop-filter: blur(30px) saturate(190%);
+  /* on the clipped layer, so it follows the dent instead of drawing the
+     original capsule outline behind it */
+  filter: drop-shadow(0 7px 18px #00000026) drop-shadow(0 1px 2px #0000001c);
+}
+/* the edge is stroked, not an inset shadow, so it bends with the dent */
+.bar__edge { position: absolute; inset: 0; z-index: 2; pointer-events: none; overflow: visible; }
+.bar__edge path { fill: none; stroke-width: 1.3; }
+.bar__sheen {
+  position: absolute; inset: 0; border-radius: inherit; z-index: 1; pointer-events: none;
+  background: linear-gradient(180deg, #ffffff54 0%, #ffffff00 46%),
+              linear-gradient(0deg, var(--shade) 0%, #00000000 36%);
+}
+
+.tabs { display: flex; position: relative; z-index: 2; }
+
+.lens {
+  position: absolute; top: 0; left: 0; width: 25%; height: 100%;
+  border-radius: 999px; z-index: 0; will-change: transform, width, height;
+  transform-origin: center center;
+  background: var(--lens-rest); box-shadow: inset 0 1px 0 #ffffff5c;
+  transition: background 200ms ease, box-shadow 200ms ease;
+}
+/* live: clear glass that swells past the bar edge and glows at its boundary,
+   which is what makes the bar look pinched underneath it */
+.lens.lit {
+  background: var(--lens-live);
+  backdrop-filter: saturate(124%) brightness(1.03);
+  -webkit-backdrop-filter: saturate(124%) brightness(1.03);
+  box-shadow:
+    inset 0 1.8px 0 var(--lens-rim),
+    inset 0 -1.6px 0 #ffffff99,
+    inset 1.6px 0 0 #ffffffb3,
+    inset -1.6px 0 0 #ffffffb3,
+    0 2px 8px #0000001f;
+}
+
+.tab {
+  flex: 1; border: 0; background: none; font: inherit; color: var(--text-2);
+  padding: var(--tab-pad) 0 calc(var(--tab-pad) - 1px);
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  position: relative; z-index: 1; cursor: pointer; transition: color 220ms ease;
+  transform-origin: center;
+}
+.tab svg { width: 23px; height: 23px; }
+.tab .t { font-size: 10px; font-weight: 500; }
+.tab.on { color: var(--ink); }
+
+.hint { text-align: center; color: var(--text-3); font-size: 13px; line-height: 1.5; margin-top: 26px; }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="seg" id="seg">
+    <button data-th="light">Light</button><button data-th="dark">Dark</button><button data-th="auto" class="on">Auto</button>
+  </div>
+
+  <h1 class="title">Home</h1>
+  <p class="sub">Hold the lens. Watch the bar swell under it.</p>
+
+  <div class="stats">
+    <div class="stat g" data-sq="22"><div class="n">12</div><div class="k">Streak</div></div>
+    <div class="stat g" data-sq="22"><div class="n">340</div><div class="k">Points</div></div>
+    <div class="stat" data-sq="22"><div class="n">4</div><div class="k">Absent</div></div>
+  </div>
+
+  <div class="lbl">Today</div>
+  <div class="group" data-sq="22">
+    <div class="row" data-tap>
+      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6.5 6.5h11v11h-11z"/><path d="M3 9v6M21 9v6"/></svg></div>
+      <div class="label">Push Day</div><div class="val">5 exercises</div>
+      <div class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></div>
+    </div>
+    <div class="row" data-tap>
+      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M12 3v18M5 8h14M5 16h14"/></svg></div>
+      <div class="label">Diet plan</div><div class="val">3 of 5</div>
+      <div class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></div>
+    </div>
+    <div class="row" data-tap>
+      <div class="ic gold"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M12 3l2.4 5.3 5.6.6-4.2 3.9 1.2 5.7L12 15.7 6.9 18.5l1.2-5.7L4 8.9l5.6-.6z"/></svg></div>
+      <div class="label">Premium plan</div><div class="val">Active</div>
+      <div class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></div>
+    </div>
+  </div>
+
+  <div class="lbl">Scroll this under the bar</div>
+  <div class="band" data-sq="26">the frost should smear these colours</div>
+
+  <button class="btn" data-press>Mark attendance</button>
+  <button class="btn gold" data-press>Renew membership</button>
+  <button class="btn frost" data-press>Request plan change</button>
+
+  <div class="lbl">Tune it</div>
+  <div class="group plain" data-sq="22">
+    <div class="row slider"><div class="top"><span>Button bloom</span><b id="v1">1.030</b></div>
+      <input type="range" id="s1" min="1" max="1.16" step="0.005" value="1.03"></div>
+    <div class="row slider"><div class="top"><span>Button bounce</span><b id="v2">1.60</b></div>
+      <input type="range" id="s2" min="1" max="2.2" step="0.02" value="1.60"></div>
+    <div class="row slider"><div class="top"><span>Button speed (ms)</span><b id="v3">260</b></div>
+      <input type="range" id="s3" min="120" max="760" step="10" value="260"></div>
+    <div class="row slider"><div class="top"><span>Lens springiness</span><b id="v4">160</b></div>
+      <input type="range" id="s4" min="60" max="400" step="5" value="160"></div>
+    <div class="row slider"><div class="top"><span>Lens wobble</span><b id="v5">21.5</b></div>
+      <input type="range" id="s5" min="6" max="34" step="0.5" value="21.5"></div>
+    <div class="row slider"><div class="top"><span>Lens swell, wide</span><b id="v6">1.31</b></div>
+      <input type="range" id="s6" min="1" max="1.8" step="0.01" value="1.31"></div>
+    <div class="row slider"><div class="top"><span>Lens swell, tall</span><b id="v7">1.46</b></div>
+      <input type="range" id="s7" min="1" max="1.8" step="0.01" value="1.46"></div>
+    <div class="row slider"><div class="top"><span>Bar give (px)</span><b id="v8">5.0</b></div>
+      <input type="range" id="s8" min="0" max="14" step="0.5" value="5"></div>
+    <div class="row slider"><div class="top"><span>Icon zoom</span><b id="v9">1.30</b></div>
+      <input type="range" id="s9" min="1" max="1.4" step="0.01" value="1.30"></div>
+    <div class="row slider"><div class="top"><span>Bar width (px)</span><b id="v10">360</b></div>
+      <input type="range" id="s10" min="280" max="400" step="2" value="360"></div>
+    <div class="row slider"><div class="top"><span>Bar thickness</span><b id="v11">5</b></div>
+      <input type="range" id="s11" min="2" max="14" step="0.5" value="5"></div>
+  </div>
+
+  <div class="presets">
+    <button id="apple">Apple's</button><button id="mine">Your earlier numbers</button>
+  </div>
+
+  <div class="band" data-sq="26" style="margin-top:20px">keep scrolling, watch the fade</div>
+  <p class="hint">Swell 1.00 and pinch 0 turn the effect off.<br>Hold the lens rather than tapping it.</p>
+</div>
+
+<div class="scrim"></div>
+
+<div class="dock">
+  <nav class="bar" id="bar">
+    <div class="bar__glass"></div><div class="bar__sheen"></div>
+    <svg class="bar__edge" id="edge" preserveAspectRatio="none">
+      <defs><linearGradient id="rimgrad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0"    stop-color="var(--rim-hot)"/>
+        <stop offset="0.26" stop-color="var(--rim-cool)"/>
+        <stop offset="0.49" stop-color="transparent"/>
+        <stop offset="0.73" stop-color="var(--rim-cool)"/>
+        <stop offset="1"    stop-color="var(--rim-hot)"/>
+      </linearGradient></defs>
+      <path id="edgePath" stroke="url(#rimgrad)"/>
+    </svg>
+    <div class="tabs" id="tabs">
+      <div class="lens" id="lens"></div>
+      <button class="tab on" data-i="0">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-7 9 7v10a1 1 0 01-1 1h-5v-7H9v7H4a1 1 0 01-1-1z"/></svg><span class="t">Home</span>
+      </button>
+      <button class="tab" data-i="1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6.5 6.5h11v11h-11z"/><path d="M3 9v6M21 9v6"/></svg><span class="t">Fitness</span>
+      </button>
+      <button class="tab" data-i="2">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18l5-6 4 3 6-8"/></svg><span class="t">Progress</span>
+      </button>
+      <button class="tab" data-i="3">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.3 3.1-5.5 7-5.5s7 2.2 7 5.5"/></svg><span class="t">Profile</span>
+      </button>
+    </div>
+  </nav>
+</div>
+
+<script>
+/* ---------- squircle ----------
+   Used on every browser now. Chrome's native corner-shape draws a different
+   curve to this one, which is why the laptop and the phone disagreed. */
+function squirclePath(w, h, r, n = 5) {
+  r = Math.min(r, w/2, h/2);
+  const steps = 16, pts = [];
+  const corners = [[w-r,h-r,1,1], [r,h-r,-1,1], [r,r,-1,-1], [w-r,r,1,-1]];
+  for (const [cx, cy, sx, sy] of corners) {
+    const forward = sx * sy > 0;                 // neighbouring corners sweep opposite ways
+    for (let i = 0; i <= steps; i++) {
+      const a = (forward ? i : steps - i) / steps * Math.PI / 2;
+      pts.push((cx + sx*r*Math.abs(Math.cos(a))**(2/n)).toFixed(2) + ' ' +
+               (cy + sy*r*Math.abs(Math.sin(a))**(2/n)).toFixed(2));
+    }
+  }
+  return `path("M${pts.join('L')}Z")`;
+}
+const shaped = [...document.querySelectorAll('[data-sq]')];
+const draw = el => {
+  const b = el.getBoundingClientRect();
+  if (b.width > 2 && b.height > 2) el.style.clipPath = squirclePath(b.width, b.height, +el.dataset.sq);
+};
+const ro = new ResizeObserver(es => es.forEach(e => draw(e.target)));
+shaped.forEach(el => { draw(el); ro.observe(el); });
+document.fonts?.ready.then(() => shaped.forEach(draw));
+
+document.querySelectorAll('[data-press], [data-tap]').forEach(el => {
+  const on = () => el.classList.add('pressed'), off = () => el.classList.remove('pressed');
+  el.addEventListener('pointerdown', on);
+  ['pointerup','pointercancel','pointerleave'].forEach(e => el.addEventListener(e, off));
+});
+
+/* ---------- lens ---------- */
+const bar = document.getElementById('bar');
+const tabsEl = document.getElementById('tabs');
+const lens = document.getElementById('lens');
+const tabs = [...document.querySelectorAll('.tab')];
+const glass = document.querySelector('.bar__glass');
+const sheen = document.querySelector('.bar__sheen');
+const edgeSvg = document.getElementById('edge');
+const edgePath = document.getElementById('edgePath');
+
+let stiffness = 160, damping = 21.5;
+let swellW = 1.31, swellH = 1.46, give = 5, zoom = 1.30;
+let pos = 0, vel = 0, tgt = 0, index = 0, raf = null;
+let grow = 0, growTo = 0;                 // 0 at rest, 1 fully swollen
+const tabZoom = tabs.map(() => 0);        // one eased value per tab
+let down = false, startX = 0, startPos = 0, moved = 0;
+
+/* Signed distance to a horizontal capsule. Negative inside.
+   This is what lets the bar deform against the lens's real silhouette
+   instead of against its bounding box. */
+function capsuleSD(px, py, cx, cy, w, h) {
+  const r = h / 2, half = Math.max(0, w / 2 - r);
+  const qx = Math.abs(px - cx) - half, qy = py - cy;
+  return (qx < 0 ? Math.abs(qy) : Math.hypot(qx, qy)) - r;
+}
+
+/* The bar outline as points with outward normals, so every part of it,
+   the round ends included, can be pushed in by the lens. */
+function outline(w, h) {
+  const r = h / 2, pts = [];
+  const N = 26, C = 22;
+  for (let i = 0; i <= N; i++) pts.push([r + (w - 2*r) * i/N, 0, 0, -1]);
+  for (let i = 1; i < C; i++) {
+    const a = -Math.PI/2 + Math.PI * i/C;
+    pts.push([w - r + r*Math.cos(a), h/2 + r*Math.sin(a), Math.cos(a), Math.sin(a)]);
+  }
+  for (let i = 0; i <= N; i++) pts.push([w - r - (w - 2*r) * i/N, h, 0, 1]);
+  for (let i = 1; i < C; i++) {
+    const a = Math.PI/2 + Math.PI * i/C;
+    pts.push([r + r*Math.cos(a), h/2 + r*Math.sin(a), Math.cos(a), Math.sin(a)]);
+  }
+  return pts;
+}
+
+function reshape(cx, cy, lw, lh) {
+  // offsetWidth, not getBoundingClientRect. The bar scales while held, and a
+  // rect would hand back the scaled size, which the clip path then applies
+  // inside the already-scaled element. Layout sizes are scale free.
+  const w = glass.offsetWidth, h = glass.offsetHeight;
+  if (w < 4) return;
+
+  const depth = give * grow, feather = 9;
+  let d = '';
+  for (const [x, y, nx, ny] of outline(w, h)) {
+    let push = 0;
+    if (depth > 0.2) {
+      const sd = capsuleSD(x, y, cx, cy, lw, lh);
+      const k = Math.min(1, Math.max(0, -sd / feather));
+      push = depth * (k * k * (3 - 2 * k));
+    }
+    d += (d ? 'L' : 'M') + (x - nx*push).toFixed(2) + ',' + (y - ny*push).toFixed(2);
+  }
+  d += 'Z';
+
+  glass.style.clipPath = sheen.style.clipPath = `path("${d}")`;
+  edgeSvg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+  edgePath.setAttribute('d', d);
+}
+
+function paint() {
+  const stripW = tabsEl.offsetWidth, stripH = tabsEl.offsetHeight;
+  if (stripW < 4) return;
+  const pad = (bar.offsetWidth - stripW) / 2;      // the bar's own padding
+  const baseW = stripW / 4, baseH = stripH;
+
+  // settle exactly onto the tab so a resting lens is never a hair too wide
+  const g = grow < 0.005 ? 0 : grow;
+  const lw = baseW * (1 + g * (swellW - 1));
+  const lh = baseH * (1 + g * (swellH - 1));
+  const x = (pos / 100) * baseW - (lw - baseW) / 2;
+
+  lens.style.width  = lw + 'px';
+  lens.style.height = lh + 'px';
+  lens.style.top    = (baseH - lh) / 2 + 'px';
+  lens.style.transform = `translateX(${x}px)`;
+
+  // Each tab zooms by how close the lens is to it, not by which one is
+  // selected. So it swells as the lens arrives and falls away as it leaves,
+  // instead of snapping on at the moment the selection changes.
+  const centre = pos / 100;
+  tabs.forEach((tab, i) => {
+    const near = Math.max(0, 1 - Math.abs(centre - i));
+    const want = grow * near;
+    tabZoom[i] += (want - tabZoom[i]) * 0.12;      // slower than the swell
+    const z = 1 + tabZoom[i] * (zoom - 1);
+    tab.style.transform = tabZoom[i] > 0.002 ? `scale(${z.toFixed(4)})` : '';
+  });
+
+  // lens centre in the glass layer's own coordinates
+  reshape(pad + x + lw / 2, pad + baseH / 2, lw, lh);
+}
+
+function tick() {
+  const dt = 1/60;
+  vel += (-stiffness*(pos - tgt) - damping*vel) * dt;
+  pos += vel * dt;
+
+  // While the finger is down it stays fully swollen. Once released, the swell
+  // tracks how fast the lens is travelling, so a tapped jump swells on the way
+  // across and settles as it lands.
+  if (!down) growTo = Math.min(1, Math.abs(vel) / 110);
+  grow += (growTo - grow) * 0.2;
+
+  const still = Math.abs(vel) < 0.35 && Math.abs(pos - tgt) < 0.35;
+  const done  = Math.abs(grow - growTo) < 0.004 && tabZoom.every((z, i) =>
+                  Math.abs(z - grow * Math.max(0, 1 - Math.abs(pos/100 - i))) < 0.004);
+  if (still) { pos = tgt; vel = 0; }
+  if (still && done) { grow = growTo; paint(); raf = null; return; }
+  paint();
+  raf = requestAnimationFrame(tick);
+}
+const spring = () => { if (!raf) raf = requestAnimationFrame(tick); };
+
+function select(i) {
+  index = i; tgt = i * 100;
+  tabs.forEach(t => t.classList.toggle('on', +t.dataset.i === i));
+  spring();
+  if (navigator.vibrate) navigator.vibrate(7);
+}
+
+tabsEl.addEventListener('pointerdown', e => {
+  down = true; moved = 0; startX = e.clientX; startPos = pos; vel = 0;
+  lens.classList.add('lit');
+  bar.classList.add('held');
+  growTo = 1; spring();
+  tabsEl.setPointerCapture(e.pointerId);
+});
+
+tabsEl.addEventListener('pointermove', e => {
+  if (!down) return;
+  moved = Math.max(moved, Math.abs(e.clientX - startX));
+  if (moved < 5) return;
+  const step = tabsEl.getBoundingClientRect().width / 4;
+  const next = Math.max(0, Math.min(300, startPos + (e.clientX - startX)/step*100));
+  vel = (next - pos) * 40; pos = next; tgt = next; paint();
+  const near = Math.round(pos/100);
+  tabs.forEach(t => t.classList.toggle('on', +t.dataset.i === near));
+});
+
+function release(e) {
+  if (!down) return;
+  down = false;
+  let i;
+  if (moved < 5) {
+    const hit = document.elementFromPoint(e.clientX, e.clientY)?.closest('.tab');
+    i = hit ? +hit.dataset.i : index;
+  } else i = Math.round(Math.max(0, Math.min(300, pos + vel*0.05)) / 100);
+  bar.classList.remove('held');
+  select(i);
+  setTimeout(() => lens.classList.remove('lit'), 300);
+}
+tabsEl.addEventListener('pointerup', release);
+tabsEl.addEventListener('pointercancel', release);
+
+/* ---------- controls ---------- */
+const rs = document.documentElement.style;
+const sliders = [s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11];
+const fill = el => el.style.setProperty('--fill', (el.value-el.min)/(el.max-el.min)*100 + '%');
+
+function apply() {
+  v1.textContent = (+s1.value).toFixed(3); rs.setProperty('--bloom', s1.value);
+  v2.textContent = (+s2.value).toFixed(2); rs.setProperty('--bounce', s2.value);
+  v3.textContent = s3.value;               rs.setProperty('--speed', s3.value + 'ms');
+  v4.textContent = s4.value;               stiffness = +s4.value;
+  v5.textContent = (+s5.value).toFixed(1); damping   = +s5.value;
+  v6.textContent = (+s6.value).toFixed(2); swellW    = +s6.value;
+  v7.textContent = (+s7.value).toFixed(2); swellH    = +s7.value;
+  v8.textContent = (+s8.value).toFixed(1); give      = +s8.value;
+  v9.textContent = (+s9.value).toFixed(2); zoom      = +s9.value;
+  v10.textContent = s10.value;             rs.setProperty('--bar-w', s10.value + 'px');
+  v11.textContent = s11.value;             rs.setProperty('--tab-pad', s11.value + 'px');
+  sliders.forEach(fill);
+  paint();
+}
+sliders.forEach(x => x.addEventListener('input', apply));
+apply();
+addEventListener('resize', paint);
+
+const setAll = (...v) => { sliders.forEach((x,i) => x.value = v[i]); apply(); };
+apple.onclick = () => setAll(1.03, 1.60, 260, 160, 21.5, 1.31, 1.46, 5, 1.30, 360, 5);
+mine.onclick  = () => setAll(1.045, 1.80, 630, 190, 15,   1.31, 1.46, 5, 1.30, 360, 5);
+
+document.getElementById('seg').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  document.querySelectorAll('#seg button').forEach(x => x.classList.toggle('on', x === b));
+  if (b.dataset.th === 'auto') document.documentElement.removeAttribute('data-theme');
+  else document.documentElement.setAttribute('data-theme', b.dataset.th);
+});
+</script>
+</body>
+</html>

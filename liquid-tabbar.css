@@ -1,0 +1,122 @@
+/* Liquid glass tab bar
+   Singh Fitness Gym, final values. Reusable in other projects.
+
+   Locked settings:
+     button bloom 1.030   button bounce 1.60   button speed 260ms
+     lens springiness 160 lens wobble 21.5
+     lens swell wide 1.31 lens swell tall 1.46
+     bar give 5px         icon zoom 1.30
+     bar width 360px      bar thickness 5px
+*/
+
+:root {
+  --tabbar-frost: 250 250 252;
+  --tabbar-frost-a: 0.78;
+  --tabbar-rim-hot: #ffffffed;
+  --tabbar-rim-cool: #ffffff45;
+  --tabbar-shade: #00000016;
+  --tabbar-ink: #0d7fd6;
+  --tabbar-text-2: #3c3c4399;
+  --tabbar-lens-rest: #78788026;
+  --tabbar-lens-live: #ffffff1c;
+  --tabbar-lens-rim: #ffffff;
+  --bar-w: 360px;
+  --tab-pad: 5px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --tabbar-frost: 38 38 41;
+    --tabbar-frost-a: 0.74;
+    --tabbar-rim-hot: #ffffff8f;
+    --tabbar-rim-cool: #ffffff1f;
+    --tabbar-shade: #00000047;
+    --tabbar-ink: #7ccaff;
+    --tabbar-text-2: #ebebf599;
+    --tabbar-lens-rest: #ffffff1c;
+    --tabbar-lens-live: #ffffff17;
+    --tabbar-lens-rim: #ffffffc9;
+  }
+}
+
+.scrim {
+  position: fixed; left: 0; right: 0; bottom: 0;
+  height: calc(190px + env(safe-area-inset-bottom));
+  pointer-events: none; z-index: 40;
+  background: linear-gradient(180deg,
+    rgb(var(--bg-rgb)/0) 0%, rgb(var(--bg-rgb)/0.12) 34%,
+    rgb(var(--bg-rgb)/0.30) 56%, rgb(var(--bg-rgb)/0.52) 76%, rgb(var(--bg-rgb)/0.72) 100%);
+}
+
+.dock {
+  position: fixed; left: 0; right: 0; bottom: calc(16px + env(safe-area-inset-bottom));
+  display: flex; justify-content: center; pointer-events: none; z-index: 60;
+}
+
+.bar {
+  position: relative; pointer-events: auto;
+  width: min(var(--bar-w), calc(100% - 32px));
+  padding: 6px; touch-action: none; border-radius: 999px; overflow: visible;
+  transition: transform 340ms cubic-bezier(0.22, 1.5, 0.36, 1);
+}
+
+.bar.held { transform: scale(1.022); }
+
+.bar__glass {
+  position: absolute; inset: 0; border-radius: inherit; z-index: 0;
+  background: rgb(var(--tabbar-frost) / var(--tabbar-frost-a));
+  backdrop-filter: blur(30px) saturate(190%);
+  -webkit-backdrop-filter: blur(30px) saturate(190%);
+  /* on the clipped layer, so it follows the dent instead of drawing the
+     original capsule outline behind it */
+  filter: drop-shadow(0 7px 18px #00000026) drop-shadow(0 1px 2px #0000001c);
+}
+
+/* the edge is stroked, not an inset shadow, so it bends with the dent */
+.bar__edge { position: absolute; inset: 0; z-index: 2; pointer-events: none; overflow: visible; }
+
+.bar__edge path { fill: none; stroke-width: 1.3; }
+
+.bar__sheen {
+  position: absolute; inset: 0; border-radius: inherit; z-index: 1; pointer-events: none;
+  background: linear-gradient(180deg, #ffffff54 0%, #ffffff00 46%),
+              linear-gradient(0deg, var(--tabbar-shade) 0%, #00000000 36%);
+}
+
+.tabs { display: flex; position: relative; z-index: 2; }
+
+.lens {
+  position: absolute; top: 0; left: 0; width: 25%; height: 100%;
+  border-radius: 999px; z-index: 0; will-change: transform, width, height;
+  transform-origin: center center;
+  background: var(--tabbar-lens-rest); box-shadow: inset 0 1px 0 #ffffff5c;
+  transition: background 200ms ease, box-shadow 200ms ease;
+}
+
+/* live: clear glass that swells past the bar edge and glows at its boundary,
+   which is what makes the bar look pinched underneath it */
+.lens.lit {
+  background: var(--tabbar-lens-live);
+  backdrop-filter: saturate(124%) brightness(1.03);
+  -webkit-backdrop-filter: saturate(124%) brightness(1.03);
+  box-shadow:
+    inset 0 1.8px 0 var(--tabbar-lens-rim),
+    inset 0 -1.6px 0 #ffffff99,
+    inset 1.6px 0 0 #ffffffb3,
+    inset -1.6px 0 0 #ffffffb3,
+    0 2px 8px #0000001f;
+}
+
+.tab {
+  flex: 1; border: 0; background: none; font: inherit; color: var(--tabbar-text-2);
+  padding: var(--tab-pad) 0 calc(var(--tab-pad) - 1px);
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  position: relative; z-index: 1; cursor: pointer; transition: color 220ms ease;
+  transform-origin: center;
+}
+
+.tab svg { width: 23px; height: 23px; }
+
+.tab .t { font-size: 10px; font-weight: 500; }
+
+.tab.on { color: var(--tabbar-ink); }
